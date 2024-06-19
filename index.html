@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>ระบบลงทะเบียน</title>
+  <?!= include ('css') ?>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <section id="page1" >
+    <div class="wrapper mx-auto mt-3">
+      <!-- <div class="title-text">
+        <div class="title login">
+          เข้าสู่ระบบ
+        </div>
+        <div class="title signup">
+          ลงทะเบียน
+        </div>
+      </div> -->
+      <div class="form-container">
+        <div class="slide-controls">
+          <input type="radio" name="slide" id="login" checked>
+          <input type="radio" name="slide" id="signup">
+          <label for="login" class="slide login">เข้าสู่ระบบ</label>
+          <label for="signup" class="slide signup">ลงทะเบียน</label>
+          <div class="slider-tab"></div>
+        </div>
+        <div class="form-inner">
+          <form action="#" class="login" id="form2" onsubmit="sumitSignIn(this)">
+            <div class="field">
+              <input type="text" style="text-align:center" placeholder="อีเมล์"  name ="input1" required>
+            </div>
+            <div class="field">
+              <input type="password" style="text-align:center" placeholder="รหัสผ่าน" minlength="8" maxlength="8" name ="input2" required>
+            </div>
+            <div class="alert" id="output1"></div>
+            <!-- <div class="pass-link">
+                     <a href="#">Forgot password?</a>
+                  </div> -->
+            <div class="field btn">
+              <div class="btn-layer"></div>
+              <input type="submit" value="ลงชื่อเข้าใช้">
+            </div>
+            <div class="signup-link">
+              ยังไม่ได้เป็นสมาชิก? <a href="">ลงทะเบียน</a>
+            </div>
+          </form>
+          <form action="#" class="signup" id="form1" onsubmit="sumitSignUp(this)">
+            <div class="field">
+              <input type="email" placeholder="อีเมล์" name ="input1" required>
+            </div>
+            <div class="field">
+              <input type="password" placeholder="รหัสผ่าน" name="input2" minlength="8" maxlength="8" required>
+            </div>
+            <div class="field">
+              <input type="text" placeholder="ชื่อ สกุล" name="input3" required>
+            </div>
+            <div class="field btn">
+              <div class="btn-layer"></div>
+              <input type="submit" value="ลงทะเบียน">
+              </div>
+            <div class="alert" id="output2"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+</section>
+<section id="page2" style="display:none">
+  <div class="container">
+  <button type="button" class="btn btn-primary mb-3 mt-3" onclick="logout()">ออกจากระบบ</button>
+<iframe width="100%" height="800" src="https://lookerstudio.google.com/embed/reporting/c309bd84-50b7-4f8a-9bb0-ab673a50f660/page/XTbfD" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+  </div>
+</section>
+  <script>
+    function logout(){
+      Swal.fire({
+  title: 'ต้องการออกจากระบบ?',
+  text: "คุณต้องการออกจากระบบไหม!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'ตกลง',
+  cancelButtonText: 'ยกเลิก'
+}).then((result) => {
+  if (result.isConfirmed) {
+    document.getElementById('page2').style.display="none";
+    document.getElementById('page1').style.display="block";
+  }
+})
+    }
+         const loginText = document.querySelector(".title-text .login");
+         const loginForm = document.querySelector("form.login");
+         const loginBtn = document.querySelector("label.login");
+         const signupBtn = document.querySelector("label.signup");
+         const signupLink = document.querySelector("form .signup-link a");
+         signupBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "-50%";
+           loginText.style.marginLeft = "-50%";
+         });
+         loginBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "0%";
+           loginText.style.marginLeft = "0%";
+         });
+         signupLink.onclick = (()=>{
+           signupBtn.click();
+           return false;
+         });
+         function sumitSignUp(obj){
+           event.preventDefault()
+           google.script.run.withSuccessHandler(success1).signup(obj)
+         }
+         function success1(){
+          document.getElementById('output2').innerHTML = "ลงทะเบียนเรียบร้อยแล้ว"
+          document.getElementById('form1').reset()
+         }
+         function sumitSignIn(obj){
+           event.preventDefault()
+           google.script.run.withSuccessHandler(success2).signin(obj)
+           document.getElementById('output1').innerHTML = ""
+         }
+         function success2(output){
+           if(output == true){
+          document.getElementById('output1').innerHTML = "ลงชื่อเข้าใช้เรียบร้อยแล้ว"
+          document.getElementById('form2').reset()
+          document.getElementById('page1').style.display="none";
+          document.getElementById('page2').style.display="block";   
+           }else{
+          document.getElementById('output1').innerHTML = "คุณกรอกข้อมูลไม่ถูกต้อง!"
+           }
+         }
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+  </script>
+</body>
+</html>
